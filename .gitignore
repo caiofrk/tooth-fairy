@@ -1,0 +1,19 @@
+# IDE / OS
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
+
+# Backend (Python)
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+.env
+backend/.pytest_cache/
+backend/.coverage
+backend/htmlcov/

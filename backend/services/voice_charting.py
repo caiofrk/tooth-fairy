@@ -1,0 +1,78 @@
+import os
+from fastapi import APIRouter, UploadFile, File, HTTPException
+from google import genai
+from pydantic import BaseModel, Field
+from openai import AsyncOpenAI
+from supabase import create_client, Client
+import tempfile
+
+voice_router = APIRouter()
+ai_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+openai_client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+db: Client = create_client(os.getenv("SUPABASE_URL", ""), os.getenv("SUPABASE_ANON_KEY", ""))
+
+class ToothFinding(BaseModel):
+    tooth_number: int = Field(description="FDI World Dental Federation notation tooth number (11-48)")
+    surface: str = Field(description="Tooth surface affected (e.g., occlusal, mesial, distal, buccal, lingual)")
+    condition: str = Field(description="Condition found (e.g., decay, fracture, restoration, missing)")
+
+class ChartingResult(BaseModel):
+    findings: list[ToothFinding] = Field(description="List of clinical findings extracted from the audio")
+
+@voice_router.post("/chart", response_model=ChartingResult)
+async def process_voice_charting(audio: UploadFile = File(...)):
+    if not audio.content_type.startswith("audio/"):
+        raise HTTPException(status_code=400, detail="Invalid file type. Must be audio.")
+
+    temp_file_path = ""
+    try:
+        # Save uploaded audio to a temp file for OpenAI Whisper
+        suffix = os.path.splitext(audio.filename)[1] if audio.filename else ".m4a"
+        with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+            tmp.write(await audio.read())
+            temp_file_path = tmp.name
+
+        # 1. Transcribe using Whisper API
+        with open(temp_file_path, "rb") as audio_file:
+            transcript = await openai_client.audio.transcriptions.create(
+                model="whisper-1",
+                file=audio_file,
+                response_format="text"
+            )
+
+        # 2. Extract structured JSON using Gemini LLM
+        prompt = f"""
+        You are an expert dental assistant. A dentist just dictated the following clinical notes:
+        "{transcript}"
+        
+        Extract the tooth number, surface, and condition for each finding.
+        Output MUST be strictly JSON mapping to the requested schema.
+        """
+        
+        response = ai_client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt,
+            config={'response_mime_type': 'application/json', 'response_schema': ChartingResult}
+        )
+        
+        result = response.parsed
+        
+        # In a real scenario, patient_id and staff_id should come from the authenticated token
+        # Using placeholder UUIDs for demonstration
+        mock_patient_id = "00000000-0000-0000-0000-000000000000"
+        mock_staff_id = "11111111-1111-1111-1111-111111111111"
+        
+        # Log to Supabase securely
+        if os.getenv("SUPABASE_URL"):
+            db.table("odontogram_charts").insert({
+                "patient_id": mock_patient_id,
+                "staff_id": mock_staff_id,
+                "chart_data": result.model_dump()
+            }).execute()
+        
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Voice charting failed: {str(e)}")
+    finally:
+        if temp_file_path and os.path.exists(temp_file_path):
+            os.remove(temp_file_path)
