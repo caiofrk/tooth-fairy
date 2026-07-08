@@ -5,6 +5,8 @@ from pydantic import BaseModel, Field
 from openai import AsyncOpenAI
 from supabase import create_client, Client
 import tempfile
+from fastapi import Depends
+from dependencies.auth import get_current_user
 
 voice_router = APIRouter()
 ai_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
@@ -20,7 +22,7 @@ class ChartingResult(BaseModel):
     findings: list[ToothFinding] = Field(description="List of clinical findings extracted from the audio")
 
 @voice_router.post("/chart", response_model=ChartingResult)
-async def process_voice_charting(audio: UploadFile = File(...)):
+async def process_voice_charting(audio: UploadFile = File(...), user_id: str = Depends(get_current_user)):
     if not audio.content_type.startswith("audio/"):
         raise HTTPException(status_code=400, detail="Invalid file type. Must be audio.")
 
@@ -58,16 +60,11 @@ async def process_voice_charting(audio: UploadFile = File(...)):
         
         result = response.parsed
         
-        # In a real scenario, patient_id and staff_id should come from the authenticated token
-        # Using placeholder UUIDs for demonstration
-        mock_patient_id = "00000000-0000-0000-0000-000000000000"
-        mock_staff_id = "11111111-1111-1111-1111-111111111111"
-        
-        # Log to Supabase securely
+        # Log to Supabase securely using the authenticated user_id as staff_id
         if os.getenv("SUPABASE_URL"):
             db.table("odontogram_charts").insert({
                 "patient_id": mock_patient_id,
-                "staff_id": mock_staff_id,
+                "staff_id": user_id,
                 "chart_data": result.model_dump()
             }).execute()
         

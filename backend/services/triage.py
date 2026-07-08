@@ -3,6 +3,8 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from google import genai
 from pydantic import BaseModel, Field
 from supabase import create_client, Client
+from fastapi import Depends
+from dependencies.auth import get_current_user
 
 app = FastAPI(title="Dental AI Microservices")
 ai_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
@@ -15,7 +17,7 @@ class TriageResult(BaseModel):
     recommendation: str = Field(description="Recommendation for the patient (MUST BE IN PORTUGUESE)")
 
 @app.post("/api/v1/triage/analyze", response_model=TriageResult)
-async def analyze_dental_scan(patient_id: str, image: UploadFile = File(...)):
+async def analyze_dental_scan(patient_id: str, image: UploadFile = File(...), user_id: str = Depends(get_current_user)):
     if not image.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Invalid file type. Must be an image.")
 

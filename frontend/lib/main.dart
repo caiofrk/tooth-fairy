@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'features/home/screens/home_screen.dart';
 import 'features/ocr/screens/ocr_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'features/auth/screens/auth_gate.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.outfitTextTheme(Theme.of(context).textTheme),
       ),
-      home: const MainNavigationScreen(),
+      home: const AuthGate(),
     );
   }
 }

@@ -5,3 +5,4 @@ google-genai
 supabase
 python-multipart
 openai
+pyjwt

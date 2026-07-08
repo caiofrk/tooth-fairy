@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class VoiceState {
   final bool isRecording;
@@ -35,6 +36,12 @@ class VoiceNotifier extends Notifier<VoiceState> {
     try {
       final uri = Uri.parse('http://10.0.2.2:8000/api/v1/voice/chart');
       var request = http.MultipartRequest('POST', uri);
+
+      final session = Supabase.instance.client.auth.currentSession;
+      if (session != null) {
+        request.headers['Authorization'] = 'Bearer ${session.accessToken}';
+      }
+
       request.files.add(await http.MultipartFile.fromPath('audio', audioPath));
       
       final response = await request.send();

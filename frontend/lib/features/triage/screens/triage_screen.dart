@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import '../providers/triage_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TriageScreen extends ConsumerWidget {
   const TriageScreen({Key? key}) : super(key: key);
@@ -11,8 +12,8 @@ class TriageScreen extends ConsumerWidget {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
-      // Hardcoded patientId for MVP testing, this should come from Auth
-      final patientId = "patient-123";
+      final user = Supabase.instance.client.auth.currentUser;
+      final patientId = user?.id ?? "unknown-patient";
       await ref.read(triageProvider.notifier).submitPatientScan(pickedFile.path, patientId);
     }
   }

@@ -17,3 +17,15 @@ backend/*.pyc
 backend/.pytest_cache/
 backend/.coverage
 backend/htmlcov/
+
+# Flutter / Dart
+build/
+.dart_tool/
+.pub-cache/
+.packages
+*.apk
+*.aab
+*.so
+*.dex
+*.jar
+

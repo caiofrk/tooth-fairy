@@ -2,6 +2,8 @@ import os
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from google import genai
 from pydantic import BaseModel, Field
+from fastapi import Depends
+from dependencies.auth import get_current_user
 
 ocr_router = APIRouter()
 ai_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
@@ -13,7 +15,7 @@ class HealthCardData(BaseModel):
     is_valid_card: bool = Field(description="False if the image does not appear to be a valid health insurance card")
 
 @ocr_router.post("/validate", response_model=HealthCardData)
-async def extract_health_card_data(image: UploadFile = File(...)):
+async def extract_health_card_data(image: UploadFile = File(...), user_id: str = Depends(get_current_user)):
     if not image.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Invalid file type. Must be an image.")
 
