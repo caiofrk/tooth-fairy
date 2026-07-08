@@ -22,10 +22,10 @@ async def extract_health_card_data(image: UploadFile = File(...)):
         
         # LLM Vision Analysis for OCR
         prompt = """
-        You are an expert AI specializing in Brazilian health insurance cards (convênios).
-        Extract the carrier name, registration number, and expiry date from this image.
-        If the image is blurry, irrelevant, or not a health card, set is_valid_card to false.
-        Return ONLY valid structured JSON.
+        Você é uma IA especialista em carteirinhas de planos de saúde (convênios) do Brasil.
+        Extraia o nome da operadora, o número de matrícula (registration_number) e a data de validade (expiry_date) desta imagem.
+        Se a imagem for irrelevante, estiver borrada ou não for um convênio, defina is_valid_card como false.
+        Retorne APENAS o JSON estruturado e válido.
         """
         
         response = ai_client.models.generate_content(

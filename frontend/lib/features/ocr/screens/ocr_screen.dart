@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import '../providers/ocr_provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OcrScreen extends ConsumerWidget {
   const OcrScreen({Key? key}) : super(key: key);
@@ -19,9 +20,12 @@ class OcrScreen extends ConsumerWidget {
     final ocrState = ref.watch(ocrProvider);
 
     return Scaffold(
+      backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
-        title: const Text('Convênio Scanner'),
-        backgroundColor: Colors.teal,
+        title: Text('Escanear Convênio', style: GoogleFonts.outfit(fontWeight: FontWeight.w600)),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.teal.shade800,
+        elevation: 0,
       ),
       body: Center(
         child: Padding(
@@ -37,32 +41,46 @@ class OcrScreen extends ConsumerWidget {
                 if (ocrState.data != null) ...[
                   if (ocrState.data!['is_valid_card'] == false)
                     const Text(
-                      'Invalid or blurry card. Please try again.',
+                      'Carteirinha inválida ou borrada. Por favor, tente novamente.',
                       style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     )
                   else ...[
                     const Icon(Icons.verified, color: Colors.green, size: 48),
                     const SizedBox(height: 10),
-                    Text('Carrier: ${ocrState.data!['carrier_name']}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    Text('Operadora: ${ocrState.data!['carrier_name']}', style: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 10),
-                    Text('Registration ID: ${ocrState.data!['registration_number']}'),
+                    Text('Matrícula: ${ocrState.data!['registration_number']}', style: const TextStyle(fontSize: 16)),
                     const SizedBox(height: 10),
-                    Text('Expiry: ${ocrState.data!['expiry_date']}'),
+                    Text('Validade: ${ocrState.data!['expiry_date']}', style: const TextStyle(fontSize: 16)),
                   ]
                 ] else
-                  const Text('Scan your physical health insurance card.'),
+                  Text(
+                    'Escaneie sua carteirinha física do convênio.',
+                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                  ),
               ],
               const SizedBox(height: 40),
               ElevatedButton.icon(
                 icon: const Icon(Icons.document_scanner),
-                label: const Text('Scan Card (Camera)'),
+                label: Text('Escanear (Câmera)', style: GoogleFonts.outfit(fontWeight: FontWeight.w600)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal.shade600,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 54),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
                 onPressed: () => _pickAndUploadImage(ref, ImageSource.camera),
               ),
-              const SizedBox(height: 10),
-              ElevatedButton.icon(
+              const SizedBox(height: 12),
+              TextButton.icon(
                 icon: const Icon(Icons.photo),
-                label: const Text('Upload from Gallery'),
+                label: Text('Enviar da Galeria', style: GoogleFonts.outfit(fontWeight: FontWeight.w600)),
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.teal.shade700,
+                  minimumSize: const Size(double.infinity, 54),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
                 onPressed: () => _pickAndUploadImage(ref, ImageSource.gallery),
               ),
             ],

@@ -9,10 +9,10 @@ ai_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 db: Client = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_ANON_KEY"))
 
 class TriageResult(BaseModel):
-    urgency_level: str = Field(description="Low, Medium, or High")
-    preliminary_findings: list[str] = Field(description="Visible issues e.g., calculus, recession")
+    urgency_level: str = Field(description="Baixa, Média, ou Alta (MUST BE IN PORTUGUESE)")
+    preliminary_findings: list[str] = Field(description="Visible issues e.g., cálculo, retração (MUST BE IN PORTUGUESE)")
     image_quality_acceptable: bool = Field(description="False if image is blurry or poorly lit")
-    recommendation: str
+    recommendation: str = Field(description="Recommendation for the patient (MUST BE IN PORTUGUESE)")
 
 @app.post("/api/v1/triage/analyze", response_model=TriageResult)
 async def analyze_dental_scan(patient_id: str, image: UploadFile = File(...)):
@@ -24,9 +24,10 @@ async def analyze_dental_scan(patient_id: str, image: UploadFile = File(...)):
         
         # LLM Vision Analysis
         prompt = """
-        You are an expert dental triage AI. Analyze this intraoral photograph.
-        Return structured JSON. If the image is blurry, set image_quality_acceptable to false.
-        DISCLAIMER: This is a preliminary screening for scheduling priority, not a clinical diagnosis.
+        Você é uma IA especialista em triagem odontológica. Analise esta fotografia intraoral.
+        Retorne um JSON estruturado. Se a imagem estiver desfocada, defina image_quality_acceptable como false.
+        MUITO IMPORTANTE: TODOS os textos (urgency_level, preliminary_findings, recommendation) DEVEM ser escritos estritamente em Português do Brasil.
+        AVISO: Esta é uma triagem preliminar para prioridade de agendamento, não um diagnóstico clínico.
         """
         response = ai_client.models.generate_content(
             model='gemini-3-flash-preview',

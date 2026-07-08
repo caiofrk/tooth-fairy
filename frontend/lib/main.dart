@@ -67,11 +67,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_filled),
-            label: 'Home',
+            label: 'Início',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.document_scanner),
-            label: 'Scanner',
+            label: 'Convênio',
           ),
         ],
       ),

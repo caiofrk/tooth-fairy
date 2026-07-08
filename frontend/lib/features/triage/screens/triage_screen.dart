@@ -24,7 +24,7 @@ class TriageScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
-        title: Text('Virtual Checkup', style: GoogleFonts.outfit(fontWeight: FontWeight.w600)),
+        title: Text('Consulta Virtual', style: GoogleFonts.outfit(fontWeight: FontWeight.w600)),
         backgroundColor: Colors.white,
         foregroundColor: Colors.teal.shade800,
         elevation: 0,
@@ -56,7 +56,7 @@ class TriageScreen extends ConsumerWidget {
                           const SizedBox(width: 12),
                           const Expanded(
                             child: Text(
-                              'Image quality is too low. Please retake the photo in better lighting.',
+                              'A qualidade da imagem está muito baixa. Por favor, tire outra foto em um local bem iluminado.',
                               style: TextStyle(color: Colors.deepOrange),
                             ),
                           ),
@@ -78,19 +78,19 @@ class TriageScreen extends ConsumerWidget {
                                 Icon(Icons.analytics, color: Colors.teal.shade600),
                                 const SizedBox(width: 10),
                                 Text(
-                                  'AI Analysis Complete',
+                                  'Análise da IA Concluída',
                                   style: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.w600),
                                 ),
                               ],
                             ),
                             const Divider(height: 30),
-                            Text('Urgency Level', style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
+                            Text('Nível de Urgência', style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
                             Text('${triageState.data!['urgency_level']}', style: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.redAccent)),
                             const SizedBox(height: 16),
-                            Text('Recommendation', style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
+                            Text('Recomendação', style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
                             Text('${triageState.data!['recommendation']}', style: const TextStyle(fontSize: 16)),
                             const SizedBox(height: 16),
-                            Text('Clinical Findings', style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
+                            Text('Achados Clínicos', style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
                             Text('${(triageState.data!['preliminary_findings'] as List).join(', ')}', style: const TextStyle(fontSize: 16)),
                           ],
                         ),
@@ -99,7 +99,7 @@ class TriageScreen extends ConsumerWidget {
                   ]
                 ] else
                   Text(
-                    'Upload an intraoral photo so our AI can begin its analysis.',
+                    'Envie uma foto intraoral para que nossa IA inicie a análise.',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
                   ),
@@ -107,7 +107,7 @@ class TriageScreen extends ConsumerWidget {
               const SizedBox(height: 40),
               ElevatedButton.icon(
                 icon: const Icon(Icons.camera_alt),
-                label: Text('Take Photo', style: GoogleFonts.outfit(fontWeight: FontWeight.w600)),
+                label: Text('Tirar Foto', style: GoogleFonts.outfit(fontWeight: FontWeight.w600)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.teal.shade600,
                   foregroundColor: Colors.white,
@@ -119,7 +119,7 @@ class TriageScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               TextButton.icon(
                 icon: const Icon(Icons.photo_library),
-                label: Text('Upload from Gallery', style: GoogleFonts.outfit(fontWeight: FontWeight.w600)),
+                label: Text('Enviar da Galeria', style: GoogleFonts.outfit(fontWeight: FontWeight.w600)),
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.teal.shade700,
                   minimumSize: const Size(double.infinity, 54),

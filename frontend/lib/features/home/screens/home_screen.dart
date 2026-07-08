@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
             backgroundColor: Colors.teal.shade700,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                'Good morning, Caio',
+                'Bom dia, Caio',
                 style: GoogleFonts.outfit(
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -52,7 +52,7 @@ class HomeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'How can we help you today?',
+                    'Como podemos ajudar hoje?',
                     style: GoogleFonts.outfit(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
@@ -62,8 +62,8 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(height: 24),
                   _buildActionCard(
                     context,
-                    title: 'Virtual Checkup',
-                    subtitle: 'AI-powered asynchronous triage',
+                    title: 'Consulta Virtual',
+                    subtitle: 'Triagem inteligente por IA',
                     icon: Icons.camera_front,
                     color: Colors.blueAccent,
                     onTap: () {
@@ -78,8 +78,8 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   _buildActionCard(
                     context,
-                    title: 'Upload Health Card',
-                    subtitle: 'Scan your Convênio seamlessly',
+                    title: 'Escanear Convênio',
+                    subtitle: 'Validação automática da carteirinha',
                     icon: Icons.credit_card,
                     color: Colors.deepPurpleAccent,
                     onTap: () {
@@ -87,7 +87,7 @@ class HomeScreen extends StatelessWidget {
                       // but here we can just show a snackbar or use a global router.
                       // For now, we will leave it as is or show a message.
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Use the OCR tab below!')),
+                        const SnackBar(content: Text('Use a aba do Scanner abaixo!')),
                       );
                     },
                   ),

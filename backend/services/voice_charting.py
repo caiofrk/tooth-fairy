@@ -13,8 +13,8 @@ db: Client = create_client(os.getenv("SUPABASE_URL", ""), os.getenv("SUPABASE_AN
 
 class ToothFinding(BaseModel):
     tooth_number: int = Field(description="FDI World Dental Federation notation tooth number (11-48)")
-    surface: str = Field(description="Tooth surface affected (e.g., occlusal, mesial, distal, buccal, lingual)")
-    condition: str = Field(description="Condition found (e.g., decay, fracture, restoration, missing)")
+    surface: str = Field(description="Face do dente afetada (e.g., oclusal, mesial, distal, vestibular, lingual) (MUST BE IN PORTUGUESE)")
+    condition: str = Field(description="Condição clínica (e.g., cárie, fratura, restauração, ausente) (MUST BE IN PORTUGUESE)")
 
 class ChartingResult(BaseModel):
     findings: list[ToothFinding] = Field(description="List of clinical findings extracted from the audio")
@@ -42,11 +42,12 @@ async def process_voice_charting(audio: UploadFile = File(...)):
 
         # 2. Extract structured JSON using Gemini LLM
         prompt = f"""
-        You are an expert dental assistant. A dentist just dictated the following clinical notes:
+        Você é um assistente odontológico especialista. Um dentista acabou de ditar as seguintes anotações clínicas em português:
         "{transcript}"
         
-        Extract the tooth number, surface, and condition for each finding.
-        Output MUST be strictly JSON mapping to the requested schema.
+        Extraia o número do dente, a face (surface) e a condição (condition) para cada achado.
+        ATENÇÃO: A saída ('surface' e 'condition') DEVE estar estritamente em Português do Brasil.
+        Retorne APENAS um JSON válido mapeando para o esquema solicitado.
         """
         
         response = ai_client.models.generate_content(

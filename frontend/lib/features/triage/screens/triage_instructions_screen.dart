@@ -21,7 +21,7 @@ class TriageInstructionsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Let\'s take a look',
+                'Vamos dar uma olhada',
                 style: GoogleFonts.outfit(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
@@ -30,7 +30,7 @@ class TriageInstructionsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                'To get the most accurate AI analysis, please follow these 3 simple steps before taking the photo.',
+                'Para obter a análise mais precisa da IA, siga estes 3 passos simples antes de tirar a foto.',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey.shade600,
@@ -41,20 +41,20 @@ class TriageInstructionsScreen extends StatelessWidget {
               
               _buildInstructionStep(
                 icon: Icons.lightbulb_outline,
-                title: 'Find good lighting',
-                description: 'Move to a brightly lit area or use a flashlight.',
+                title: 'Boa iluminação',
+                description: 'Vá para um local iluminado ou use a lanterna do celular.',
               ),
               const SizedBox(height: 24),
               _buildInstructionStep(
                 icon: Icons.tag_faces,
-                title: 'Pull your lips back',
-                description: 'Use your fingers or a spoon to reveal your teeth clearly.',
+                title: 'Afaste os lábios',
+                description: 'Use os dedos ou uma colher para mostrar bem os dentes.',
               ),
               const SizedBox(height: 24),
               _buildInstructionStep(
                 icon: Icons.center_focus_strong,
-                title: 'Keep it steady',
-                description: 'Ensure the camera is in focus and not blurry.',
+                title: 'Mantenha a câmera firme',
+                description: 'Certifique-se de que a câmera está focada e não borrada.',
               ),
               
               const Spacer(),
@@ -78,7 +78,7 @@ class TriageInstructionsScreen extends StatelessWidget {
                   elevation: 2,
                 ),
                 child: Text(
-                  'I\'m Ready',
+                  'Estou Pronto',
                   style: GoogleFonts.outfit(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
