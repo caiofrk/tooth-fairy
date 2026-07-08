@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'features/triage/screens/triage_screen.dart';
+import 'features/home/screens/home_screen.dart';
 import 'features/ocr/screens/ocr_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,8 +29,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'TOOTH FAIRY',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         useMaterial3: true,
+        textTheme: GoogleFonts.outfitTextTheme(Theme.of(context).textTheme),
       ),
       home: const MainNavigationScreen(),
     );
@@ -47,7 +49,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
   
   final List<Widget> _screens = [
-    const TriageScreen(),
+    const HomeScreen(),
     const OcrScreen(),
   ];
 
@@ -64,12 +66,12 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.medical_information),
-            label: 'AI Triage',
+            icon: Icon(Icons.home_filled),
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.document_scanner),
-            label: 'OCR Convênio',
+            label: 'Scanner',
           ),
         ],
       ),
